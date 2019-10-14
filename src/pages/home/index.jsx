@@ -280,7 +280,7 @@ export default class Home extends Component {
             padding: 8,
         };
         return (
-            <PageContent styleName="root">
+            <PageContent styleName="root" style={{paddingTop: 20}}>
                 <div styleName="statistics">
                     <DataBlock
                         color="#1890FF"
