@@ -242,7 +242,6 @@ export default class FrameTopSideMenu extends Component {
                 <Side layout={layout} theme={theme}/>
                 <div styleName={topSpaceClass.join(' ')}/>
                 {pageHead}
-                {tabsShow ? <div styleName="page-tabs" style={{left: sideWidthSpace, width: windowWidth - sideWidthSpace, transitionDuration}}><PageTabs width={windowWidth - sideWidthSpace}/></div> : null}
                 <div styleName="global-loading" style={{display: globalLoading ? 'block' : 'none'}}>
                     <Spin spinning size="large"/>
                 </div>

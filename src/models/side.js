@@ -4,7 +4,7 @@ export default {
     initialState: {
         show: true,
         width: INIT_WIDTH,  // 左侧宽度
-        collapsedWidth: 80, // 收起时宽度
+        collapsedWidth: 0, // 收起时宽度
         collapsed: false,   // 是否展开/收起
         dragging: false,    // 是否正在拖动
     },

@@ -7,7 +7,7 @@
 @borderColor: #d9d9d9;
 @transitionDuration: 300ms;
 @pageHeadHeight: 62px;
-@pageTabsHeight: 35px;
+@pageTabsHeight: 30px;
 
 body {
     margin: 0;
@@ -114,13 +114,13 @@ body {
         height: @contentTop + @pageHeadHeight;
     }
 
-    &.with-tabs {
-        height: @contentTop + @pageTabsHeight;
-    }
-
-    &.with-fixed-page-head.with-tabs {
-        height: @contentTop + @pageHeadHeight + @pageTabsHeight;
-    }
+    //&.with-tabs {
+    //    height: @contentTop + @pageTabsHeight;
+    //}
+    //
+    //&.with-fixed-page-head.with-tabs {
+    //    height: @contentTop + @pageHeadHeight + @pageTabsHeight;
+    //}
 }
 
 .page-head-fixed {
@@ -130,23 +130,9 @@ body {
     background: #fff;
     z-index: 998;
 
-    &.with-tabs {
-        top: @contentTop + @pageTabsHeight;
-    }
-}
-
-.page-tabs {
-    position: fixed;
-    right: 0;
-    top: @contentTop;
-    height: @pageTabsHeight;
-    background: #fff;
-    z-index: 998;
-    padding-right: 16px;
-
-    :global(.ant-tabs-bar) {
-        padding-top: 7px;
-    }
+    //&.with-tabs {
+    //    top: @contentTop + @pageTabsHeight;
+    //}
 }
 
 .footer {

@@ -48,9 +48,9 @@ export default class HeaderUser extends Component {
             <div styleName="user-menu" ref={node => this.userMenu = node}>
                 <Dropdown overlay={menu} getPopupContainer={() => (this.userMenu || document.body)}>
                     <span styleName="account" className={className}>
-                        <Icon type="user" style={{marginRight: 5, fontSize: 18}}/>
-                        <span style={{fontSize: 14}}>{name}</span>
-                        <Icon type="caret-down"/>
+                        <Icon type="user"/>
+                        {/*<span style={{fontSize: 14}}>{name}</span>*/}
+                        {/*<Icon type="caret-down"/>*/}
                     </span>
                 </Dropdown>
 

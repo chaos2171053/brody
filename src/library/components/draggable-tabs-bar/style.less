@@ -1,4 +1,4 @@
-@default-color: #fff;
+@default-color: none;
 //@active-color: #f0f2f5;
 @active-color: #fff;
 @primary-color: #1890ff;
@@ -36,6 +36,28 @@ body > .draggable-tabs-bar-horizontal-item {
     height: 100%;
     user-select: none;
     font-weight: 400;
+    //transition: 300ms;
+    //opacity: 1;
+
+    &:hover {
+        .draggable-tabs-bar-wrapper {
+            background: rgba(0, 0, 0, .1);
+
+            &:after {
+                box-shadow: none !important;
+            }
+        }
+    }
+
+    &.active {
+        .draggable-tabs-bar-wrapper {
+            background: @active-color;
+
+            &:after {
+                box-shadow: 0 0 10px 20px @active-color;
+            }
+        }
+    }
 
     &:hover,
     &.active {
@@ -43,10 +65,9 @@ body > .draggable-tabs-bar-horizontal-item {
 
         .draggable-tabs-bar-wrapper {
             position: relative;
-            background: @active-color;
-            color: #000;
-            font-weight: bolder;
-            border-bottom: 2px solid @primary-color;
+            color: #333;
+            //font-weight: bolder;
+            //border-bottom: 2px solid @primary-color;
         }
 
         .tabs-bar-left-corner,
@@ -131,20 +152,21 @@ body > .draggable-tabs-bar-horizontal-item {
         height: 100%;
         width: 100%;
         padding: 0 14px;
-        //border-top-left-radius: @corner-size/2;
-        //border-top-right-radius: @corner-size/2;
-        background-color: @default-color;
-        color: #333;
-        transition: 300ms;
-        border-bottom: 2px solid transparent;
+        border-top-left-radius: @corner-size/2;
+        border-top-right-radius: @corner-size/2;
+        //background-color: @default-color;
+        //color: #333;
+        color: #fff;
+        //transition: 300ms;
+        //border-bottom: 2px solid transparent;
         //border-right: 1px solid @border-color;
 
         &:before {
             content: '';
             display: block;
             position: absolute;
-            top: 5px;
-            bottom: 5px;
+            top: 8px;
+            bottom: 8px;
             left: 0;
             width: 1px;
             border-left: 1px solid @border-color;
@@ -192,7 +214,7 @@ body > .draggable-tabs-bar-horizontal-item {
         cursor: pointer;
         opacity: 0;
         z-index: 1;
-        transition: 300ms;
+        //transition: 300ms;
 
         &:hover {
             background: #d9d9d9;

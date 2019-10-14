@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {Icon} from 'antd';
 import Link from '../page-link';
@@ -11,6 +11,7 @@ import {connect} from '../../models/index';
 import {PAGE_FRAME_LAYOUT} from '@/models/settings';
 import Breadcrumb from '../breadcrumb';
 import './style.less';
+import PageTabs from "@/layouts/page-tabs";
 
 @connect(state => {
     const {menus, topMenu} = state.menu;
@@ -81,6 +82,8 @@ export default class Header extends Component {
 
         const theme = this.props.theme || ((isTopSideMenu || isSideMenu) ? 'default' : 'dark');
 
+        const windowWidth = window.innerWidth;
+
         return (
             <div id="header" styleName="header" data-theme={theme}>
                 <div styleName="logo-container" id="logo-container" style={{flex: `0 0 ${sideWidth}px`, transitionDuration}}>
@@ -90,9 +93,20 @@ export default class Header extends Component {
                             title="React Admin"
                         />
                     </Link>
+                    {
+                        showToggle && !sideCollapsed ? (
+                            <Icon
+                                className="header-trigger"
+                                styleName="trigger"
+                                type={sideCollapsed ? 'menu-unfold' : 'menu-fold'}
+                                onClick={this.handleToggle}
+                                style={theme === 'dark' ? {color: '#fff', backgroundColor: '#222'} : null}
+                            />
+                        ) : null
+                    }
                 </div>
                 {
-                    showToggle ? (
+                    showToggle && sideCollapsed ? (
                         <Icon
                             className="header-trigger"
                             styleName="trigger"
@@ -102,24 +116,10 @@ export default class Header extends Component {
                         />
                     ) : null
                 }
-                {children ? (
-                    <div styleName="center">{children}</div>
-                ) : (
-                    <div styleName="center">
-                        {showMenu ? (
-                            <HeaderMenu
-                                theme={theme}
-                                dataSource={topMenus}
-                                selectedKeys={[topMenu && topMenu.key]}
-                            />
-                        ) : null}
-                        {isSideMenu ? <div style={{marginLeft: 16}}><Breadcrumb theme={theme} dataSource={breadcrumbs}/></div> : null}
-                    </div>
-                )}
-
+                <div styleName="page-tabs" style={{left: sideWidth, width: windowWidth - sideWidth + 1, transitionDuration}}><PageTabs width={windowWidth - sideWidth + 1}/></div>
                 <div styleName="right">
-                    <HeaderFullScreen styleName="action" className="header-action"/>
                     <ThemeColorPicker styleName="action" className="header-action"/>
+                    <HeaderFullScreen styleName="action" className="header-action"/>
                     <HeaderUser styleName="action" className="header-action" theme={theme}/>
                 </div>
             </div>

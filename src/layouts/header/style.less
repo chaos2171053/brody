@@ -2,6 +2,7 @@
 @transitionDuration: 300ms;
 @layout-header-background: #001529;
 @primary-color: #1890ff;
+@pageTabsHeight: 30px;
 
 .header {
     display: flex;
@@ -16,11 +17,12 @@
     padding-right: 16px;
     background-color: @primary-color;
     background-image: url('./topbg.png');
-    background-position:right;
+    background-position: right;
     background-repeat: no-repeat;
 
     .logo-container {
         display: inline-flex;
+        justify-content: space-between;
         align-items: center;
         flex-grow: 0;
         flex-shrink: 0;
@@ -57,6 +59,7 @@
         flex-shrink: 1;
         flex-grow: 1;
         overflow: auto;
+        padding-bottom: 30px;
 
         :global {
             .ant-menu {
@@ -72,12 +75,28 @@
 
     }
 
+    .page-tabs {
+        //position: absolute;
+        //bottom: 0;
+        //right: 0;
+        height: @pageTabsHeight;
+        //background: #fff;
+        padding-right: 16px;
+        //border-top: 1px solid red;
+        align-self: flex-end;
+
+        :global(.ant-tabs-bar) {
+            padding-top: 7px;
+        }
+    }
+
     .right {
         display: flex;
         align-items: stretch;
         flex-grow: 0;
         flex-shrink: 0;
         height: 100%;
+        padding-right: 8px;
 
         .action {
             display: inline-flex;
@@ -88,7 +107,7 @@
             height: 100%;
             color: #fff;
 
-            > i {
+            i {
                 font-size: 16px;
                 vertical-align: middle;
             }
