@@ -1,10 +1,11 @@
+@primary-color: #18bfff;
+
 :global(.ant-tooltip-inner .font-icon) {
     margin-right: 8px;
 }
 
 .side-menu {
     height: 100%;
-    padding-right: 1px;
 
     & > ul {
         height: 100%;
@@ -23,12 +24,24 @@
             display: none;
         }
 
+        .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+            background: #0f1624;
+        }
+
+        .ant-menu-dark {
+            background: #141d2f;
+        }
+
         .ant-menu-item.ant-menu-item-selected {
             &::after {
                 display: block;
                 left: 0;
                 right: auto;
             }
+        }
+
+        .ant-menu .ant-menu-item.ant-menu-item-active {
+            background-color: fade(@primary-color, 40%);
         }
     }
 

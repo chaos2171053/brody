@@ -2,6 +2,7 @@
 @transitionDuration: 300ms;
 @layout-header-background: #001529;
 @primary-color: #1890ff;
+@border-color: #e8e8e8;
 
 .header {
     display: flex;
@@ -14,10 +15,11 @@
     width: 100vw; // 不会因为body出现滚动条而抖动
     height: @headerHeight;
     padding-right: 16px;
-    background-color: @primary-color;
+    background-color: #fff;
     background-image: url('./topbg.png');
-    background-position:right;
+    background-position: right;
     background-repeat: no-repeat;
+    border-bottom: 1px solid @border-color;
 
     .logo-container {
         display: inline-flex;
@@ -27,7 +29,7 @@
         height: @headerHeight;
         position: relative;
         overflow: hidden;
-        background: linear-gradient(to right, darken(@primary-color, 20%), @primary-color);
+        background: #1f304e;
         box-shadow: none;
 
         h1 {
@@ -46,7 +48,7 @@
         cursor: pointer;
         transition: all .3s;
         padding: 0 5px;
-        color: #fff;
+        color: #1f304e;
 
         &:hover {
             opacity: 0.5;
@@ -66,7 +68,7 @@
             .ant-breadcrumb a,
             .ant-breadcrumb .ant-breadcrumb-link,
             .ant-breadcrumb .ant-breadcrumb-separator {
-                color: #fff;
+                color: #333;
             }
         }
 
@@ -86,19 +88,14 @@
             padding: 0 6px;
             transition: all @transitionDuration;
             height: 100%;
-            color: #fff;
+            color: #333;
 
-            > i {
+            i {
                 font-size: 16px;
                 vertical-align: middle;
+                color: #333;
             }
-
-            //&:global(.ant-popover-open),
-            //&:hover {
-            //    background: lighten(@primary-color, 40%);
-            //}
         }
-
     }
 
     &[data-theme=dark] {

@@ -3708,12 +3708,12 @@ a:active {
 }
 
 #header {
-    background-color: @primary-color;
+    background-color: #fff;
 }
 
-#logo-container {
-    background: linear-gradient(to right, darken(@primary-color, 20%), @primary-color);
-}
+//#logo-container {
+//    background: #1f304e;
+//}
 
 .login-bg {
     background-color: @primary-color;
@@ -3722,3 +3722,23 @@ a:active {
 //.drag-bar-icon span {
 //    background: @primary-color !important;
 //}
+
+#side-menu .ant-menu .ant-menu-item.ant-menu-item-active {
+    background-color: fade(@primary-color, 40%);
+}
+
+#trigger {
+    color: @primary-color;
+}
+
+.ant-modal-header {
+    background: @primary-color;
+
+    .ant-modal-title {
+        color: #fff;
+    }
+}
+
+.ant-modal-close-x {
+    color: #fff;
+}

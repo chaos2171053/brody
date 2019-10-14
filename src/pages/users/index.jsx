@@ -117,7 +117,8 @@ export default class UserCenter extends Component {
         const formElementProps = {
             form,
             width: 300,
-            style: {paddingLeft: 16},
+            labelWidth: 85,
+            style: {paddingLeft: 10},
         };
         return (
             <PageContent>
@@ -129,7 +130,7 @@ export default class UserCenter extends Component {
                         <FormRow>
                             <FormElement
                                 {...formElementProps}
-                                label="名称"
+                                label="名称名称名称"
                                 field="name"
                                 ref={node => this.nameDom = node}
                             />
