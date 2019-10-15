@@ -214,7 +214,7 @@ export default class FrameTopSideMenu extends Component {
 
             if (pageHeadFixed) {
                 pageHead = (
-                    <div styleName={`page-head-fixed ${tabsShow ? 'with-tabs' : ''}`} style={{left: hasSide ? sideWidth : 0, transitionDuration}}>
+                    <div styleName={`page-head-fixed`} style={{left: hasSide ? sideWidth : 0, transitionDuration}}>
                         {pageHead}
                     </div>
                 );
@@ -229,7 +229,7 @@ export default class FrameTopSideMenu extends Component {
         const topSpaceClass = ['content-top-space'];
 
         if (showPageHead && pageHead && pageHeadFixed) topSpaceClass.push('with-fixed-page-head');
-        if (tabsShow) topSpaceClass.push('with-tabs');
+        // if (tabsShow) topSpaceClass.push('with-tabs');
 
         const windowWidth = window.innerWidth;
         const sideWidthSpace = hasSide ? sideWidth : 0;

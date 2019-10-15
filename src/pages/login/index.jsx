@@ -132,10 +132,12 @@ export default class extends Component {
                             </Button>
                         </Form>
                         <div styleName="error-tip">{message}</div>
-                        <div styleName="tip">
-                            <span>用户名：{userName} </span>
-                            <span>密码：{password}</span>
-                        </div>
+                        {process.env.NODE_ENV === 'development' ? (
+                            <div styleName="tip">
+                                <span>用户名：{userName} </span>
+                                <span>密码：{password}</span>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>

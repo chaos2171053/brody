@@ -1,5 +1,7 @@
 bin/
 build/
+build-ui/
+build-ui2/
 .settings/
 .gradle/
 .classpath
