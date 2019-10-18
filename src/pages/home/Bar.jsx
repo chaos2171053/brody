@@ -88,7 +88,7 @@ export default class Bar extends Component {
 
                 },
                 textStyle:{
-                    color:"#fff"},
+                    color:"#000"},
                 borderColor:"#90979c"
             }, {
                 "type": "inside",
