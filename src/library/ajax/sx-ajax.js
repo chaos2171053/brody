@@ -142,6 +142,7 @@ export default class SXAjax {
         if (user !== "null" && user !== null) {
             const { token } = JSON.parse(user);
             if (token) {
+                !options.headers && (options.headers = {});
                 options.headers["Authorization"] = `Bearer ${token}`;
             }
         }
