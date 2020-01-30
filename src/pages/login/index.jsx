@@ -1,70 +1,78 @@
-import React, {Component} from 'react';
-import {Helmet} from 'react-helmet';
-import {Form, Icon, Input, Button} from 'antd';
-import {setLoginUser, toHome} from '@/commons';
-import config from '@/commons/config-hoc';
-import Color from '@/layouts/header-color-picker';
-import Banner from './banner/index';
-import './style.less';
+import React, { Component } from "react";
+import { Helmet } from "react-helmet";
+import { Form, Icon, Input, Button } from "antd";
+import { setLoginUser, toHome } from "@/commons";
+import config from "@/commons/config-hoc";
+import Color from "@/layouts/header-color-picker";
+import Banner from "./banner/index";
+import "./style.less";
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
 @config({
-    path: '/login',
+    path: "/login",
     ajax: true,
     noFrame: true,
     noAuth: true,
-    keepAlive: false,
+    keepAlive: false
 })
 @Form.create()
 export default class extends Component {
     state = {
         loading: false,
-        message: '',
-        isMount: false,
+        message: "",
+        isMount: false
     };
 
     componentDidMount() {
-        const {form: {validateFields, setFieldsValue}} = this.props;
+        const {
+            form: { setFieldsValue }
+        } = this.props;
         // 一开始禁用提交按钮
-        validateFields(() => void 0);
+        // validateFields(() => void 0);
 
         // 开发时方便测试，填写表单
-        if (process.env.NODE_ENV === 'development' || process.env.BASE_NAME === '/react-admin-live') {
-            setFieldsValue({userName: 'admin', password: '111'});
+        if (
+            process.env.NODE_ENV === "development" ||
+            process.env.BASE_NAME === "/admin"
+        ) {
+            setFieldsValue({ userName: "admin", password: "123456" });
         }
 
-        setTimeout(() => this.setState({isMount: true}), 200);
+        setTimeout(() => this.setState({ isMount: true }), 200);
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         e && e.preventDefault();
         if (this.state.loading) return;
         this.props.form.validateFields((err, values) => {
             if (err) return;
 
-            const {userName, password} = values;
+            const { userName, password } = values;
             const params = {
-                userName,
-                password,
+                username: userName,
+                password: password
             };
 
-            this.setState({loading: true, message: ''});
-            this.props.ajax.post('/mock/login', params, {errorTip: false})
+            this.setState({ loading: true, message: "" });
+            this.props.ajax
+                .post("/auth/login", params, { errorTip: false })
+                // TODO 请求拦截
                 .then(res => {
-                    const {id, name} = res;
+                    const { id, name, token } = res.data;
                     setLoginUser({
                         id,
                         name,
+                        token
                     });
                     toHome();
                 })
                 .catch(() => {
-                    this.setState({message: '用户名或密码错误！'});
+                    this.setState({ message: "用户名或密码错误！" });
                 })
-                .finally(() => this.setState({loading: false}));
+                .finally(() => this.setState({ loading: false }));
         });
     };
 
@@ -73,51 +81,90 @@ export default class extends Component {
             getFieldDecorator,
             getFieldsError,
             getFieldError,
-            isFieldTouched,
-            getFieldsValue,
+            isFieldTouched
+            // getFieldsValue,
         } = this.props.form;
 
-        const {loading, message} = this.state;
-        const {userName, password} = getFieldsValue();
-        const userNameError = isFieldTouched('userName') && getFieldError('userName');
-        const passwordError = isFieldTouched('password') && getFieldError('password');
-        const {isMount} = this.state;
-        const formItemStyleName = isMount ? 'form-item active' : 'form-item';
+        const { loading, message } = this.state;
+        //const { userName, password } = getFieldsValue();
+        const userNameError =
+            isFieldTouched("userName") && getFieldError("userName");
+        const passwordError =
+            isFieldTouched("password") && getFieldError("password");
+        const { isMount } = this.state;
+        const formItemStyleName = isMount ? "form-item active" : "form-item";
 
         return (
             <div styleName="root" className="login-bg">
-                <Helmet title="欢迎登陆"/>
-                <div style={{position: 'fixed', bottom: -1000}}><Color/></div>
+                <Helmet title="欢迎登陆" />
+                <div style={{ position: "fixed", bottom: -1000 }}>
+                    <Color />
+                </div>
                 <div styleName="left">
-                    <Banner/>
+                    <Banner />
                 </div>
                 <div styleName="right">
                     <div styleName="box">
-                        <Form onSubmit={this.handleSubmit} className='inputLine'>
+                        <Form
+                            onSubmit={this.handleSubmit}
+                            className="inputLine"
+                        >
                             <div styleName={formItemStyleName}>
                                 <div styleName="header">欢迎登录</div>
                             </div>
                             <div styleName={formItemStyleName}>
                                 <Form.Item
-                                    validateStatus={userNameError ? 'error' : ''}
-                                    help={userNameError || ''}
+                                    validateStatus={
+                                        userNameError ? "error" : ""
+                                    }
+                                    help={userNameError || ""}
                                 >
-                                    {getFieldDecorator('userName', {
-                                        rules: [{required: true, message: '请输入用户名'}],
+                                    {getFieldDecorator("userName", {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: "请输入用户名"
+                                            }
+                                        ]
                                     })(
-                                        <Input allowClear autoFocus prefix={<Icon type="user" style={{fontSize: 13}}/>} placeholder="用户名"/>,
+                                        <Input
+                                            allowClear
+                                            autoFocus
+                                            prefix={
+                                                <Icon
+                                                    type="user"
+                                                    style={{ fontSize: 13 }}
+                                                />
+                                            }
+                                            placeholder="用户名"
+                                        />
                                     )}
                                 </Form.Item>
                             </div>
                             <div styleName={formItemStyleName}>
                                 <Form.Item
-                                    validateStatus={passwordError ? 'error' : ''}
-                                    help={passwordError || ''}
+                                    validateStatus={
+                                        passwordError ? "error" : ""
+                                    }
+                                    help={passwordError || ""}
                                 >
-                                    {getFieldDecorator('password', {
-                                        rules: [{required: true, message: '请输入密码'}],
+                                    {getFieldDecorator("password", {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: "请输入密码"
+                                            }
+                                        ]
                                     })(
-                                        <Input.Password prefix={<Icon type="lock" style={{fontSize: 13}}/>} placeholder="密码"/>,
+                                        <Input.Password
+                                            prefix={
+                                                <Icon
+                                                    type="lock"
+                                                    style={{ fontSize: 13 }}
+                                                />
+                                            }
+                                            placeholder="密码"
+                                        />
                                     )}
                                 </Form.Item>
                             </div>
@@ -134,14 +181,9 @@ export default class extends Component {
                             </div>
                         </Form>
                         <div styleName="error-tip">{message}</div>
-                        <div styleName="tip">
-                            <span>用户名：{userName} </span>
-                            <span>密码：{password}</span>
-                        </div>
                     </div>
                 </div>
             </div>
         );
     }
 }
-
