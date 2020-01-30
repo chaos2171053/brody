@@ -6,7 +6,7 @@ import {
 import pathToRegexp from "path-to-regexp/index";
 import { ROUTE_BASE_NAME } from "@/router/AppRouter";
 
-const CURRENT_USER_KEY = "current-user";
+export const CURRENT_USER_KEY = "current-user";
 
 const localStorage = window.localStorage;
 const sessionStorage = window.sessionStorage;
@@ -33,7 +33,7 @@ export function setLoginUser(currentUser = {}) {
         token, // 登录凭证 非必须 ajax请求有可能会用到，也许是cookie
         permissions // 用户权限
     });
-
+    localStorage.setItem(CURRENT_USER_KEY, userStr);
     sessionStorage.setItem(CURRENT_USER_KEY, userStr);
 }
 

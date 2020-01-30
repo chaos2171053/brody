@@ -1,7 +1,35 @@
-import SXAjax, {createAjaxHoc} from '@/library/ajax';
-import mockUrls from '../mock/url-config';
-import handleError from './handle-error';
-import handleSuccess from './handle-success';
+import SXAjax, { createAjaxHoc } from "@/library/ajax";
+import mockUrls from "../mock/url-config";
+import handleError from "./handle-error";
+import handleSuccess from "./handle-success";
+
+function switchApi() {
+    const ENV = process.env.API_URL;
+    let api = "/";
+    switch (ENV) {
+        case "local":
+            api = "http://127.0.0.1:7001";
+            break;
+        case "dev":
+            api = "http://127.0.0.1:7001";
+            break;
+        case "test":
+            api = "//";
+            break;
+        case "pre":
+            api = "//";
+
+            break;
+        case "prod":
+            api = "//";
+
+            break;
+        default:
+            api = "http://127.0.0.1:7001";
+            break;
+    }
+    return api;
+}
 
 /**
  * 判断请求是否是mock
@@ -9,7 +37,7 @@ import handleSuccess from './handle-success';
  * @returns {boolean|*}
  */
 export function isMock(url /* url, data, method, options */) {
-    return mockUrls.indexOf(url) > -1 || url.startsWith('/mock');
+    return mockUrls.indexOf(url) > -1 || url.startsWith("/mock");
 }
 
 /**
@@ -17,15 +45,15 @@ export function isMock(url /* url, data, method, options */) {
  * @type {SXAjax}
  */
 export const sxAjax = new SXAjax({
-    onShowErrorTip: (error, errorTip) => handleError({error, errorTip}),
-    onShowSuccessTip: (response, successTip) => handleSuccess({successTip}),
-    isMock,
+    onShowErrorTip: (error, errorTip) => handleError({ error, errorTip }),
+    onShowSuccessTip: (response, successTip) => handleSuccess({ successTip }),
+    isMock
 });
 
 // 默认配置
-sxAjax.defaults.baseURL = '/api';
+sxAjax.defaults.baseURL = switchApi();
 sxAjax.defaults.timeout = 1000 * 60;
-sxAjax.mockDefaults.baseURL = '/';
+sxAjax.mockDefaults.baseURL = "/";
 
 /**
  * ajax高阶组件
@@ -37,27 +65,28 @@ export const ajaxHoc = createAjaxHoc(sxAjax);
  * @type {SXAjax}
  */
 export const ajax = new SXAjax({
-    isMock,
+    isMock
 });
 
 // 默认配置
-ajax.defaults.baseURL = '/api';
+ajax.defaults.baseURL = switchApi();
 ajax.defaults.timeout = 1000 * 5;
 
 // 请求前拦截
 [ajax.instance, sxAjax.instance].forEach(instance => {
-    instance.interceptors.request.use(cfg => {
-        // Do something before request is sent
-        return cfg;
-    }, error => {
-        // Do something with request error
-        return Promise.reject(error);
-    });
+    instance.interceptors.request.use(
+        cfg => {
+            // Do something before request is sent
+            return cfg;
+        },
+        error => {
+            // Do something with request error
+            return Promise.reject(error);
+        }
+    );
 });
-
 
 /**
  * mockjs使用的axios实例
  */
-export const mockInstance = ajax.mockInstance = sxAjax.mockInstance;
-
+export const mockInstance = (ajax.mockInstance = sxAjax.mockInstance);

@@ -1,29 +1,6 @@
-/** * * * * * * * * * * * * * * * * * * * * * * **
- *                    _ooOoo_                    *
- *                   o8888888o                   *
- *                   88" . "88                   *
- *                   (| -_- |)                   *
- *                   O\  =  /O                   *
- *                ____/`---'\____                *
- *              .'  \\|     |//  `.              *
- *             /  \\|||  :  |||//  \             *
- *            /  _||||| -:- |||||-  \            *
- *            |   | \\\  -  /// |   |            *
- *            | \_|  ''\---/''  |   |            *
- *            \  .-\__  `-`  ___/-. /            *
- *          ___`. .'  /--.--\  `. . __           *
- *       ."" '<  `.___\_<|>_/___.'  >'"".        *
- *      | | :  `- \`.;`\ _ /`;.`/ - ` : | |      *
- *      \  \ `-.   \_ __\ /__ _/   .-` /  /      *
- * ======`-.____`-.___\_____/___.-`____.-'====== *
- *                    `=---='                    *
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ *
- *             佛祖保佑       永无BUG              *
- *         此代码经过开光处理，不可能存在bug！        *
- * * * * * * * * * * * * * * * * * * * * * * * **/
-
-import axios from 'axios';
-import {stringify} from 'qs';
+import axios from "axios";
+import { stringify } from "qs";
+import { CURRENT_USER_KEY } from "@/commons/index";
 
 export default class SXAjax {
     /**
@@ -36,10 +13,10 @@ export default class SXAjax {
      * @param isMock 区分哪些请求需要mock，比如：url以约定'/mock'开头的请求，使用mock等方式。
      */
     constructor({
-                    onShowSuccessTip = (/* response, successTip  */) => true,
-                    onShowErrorTip = (/* err, errorTip */) => true,
-                    isMock = (/* url, data, method, options */) => false,
-                } = {}) {
+        onShowSuccessTip = (/* response, successTip  */) => true,
+        onShowErrorTip = (/* err, errorTip */) => true,
+        isMock = (/* url, data, method, options */) => false
+    } = {}) {
         this.instance = axios.create();
         this.mockInstance = axios.create();
         this.setDefaultOption(this.instance);
@@ -56,10 +33,10 @@ export default class SXAjax {
         instance.defaults.timeout = 10000;
         // instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
         // instance.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-        instance.defaults.headers.post['Content-Type'] = 'application/json';
-        instance.defaults.headers.put['Content-Type'] = 'application/json';
-        instance.defaults.baseURL = '/';
-        instance.defaults.withCredentials = true; // 跨域携带cookie
+        instance.defaults.headers.post["Content-Type"] = "application/json";
+        instance.defaults.headers.put["Content-Type"] = "application/json";
+        instance.defaults.baseURL = "/";
+        instance.defaults.withCredentials = false; // 跨域携带cookie
     }
 
     /**
@@ -70,7 +47,7 @@ export default class SXAjax {
      * @param options 配置数据，最常用是【successTip】属性，也可以吧url data method覆盖掉；
      * @returns {Promise}
      */
-    ajax(url, d = {}, method = 'get', options = {}) {
+    ajax(url, d = {}, method = "get", options = {}) {
         // 有 null的情况
         let data = d || {};
         options = options || {};
@@ -79,16 +56,20 @@ export default class SXAjax {
             successTip = false, // 默认false，不展示
             errorTip, //  = method === 'get' ? '获取数据失败！' : '操作失败！', // 默认失败提示
             noEmpty = false, // 过滤掉 值为 null、''、undefined三种参数，不传递给后端
-            originResponse = false,
+            originResponse = false
         } = options;
 
         // 删除 参数对象中为 null '' undefined 的数据，不发送给后端
-        if (noEmpty === true && typeof data === 'object' && !Array.isArray(data)) {
+        if (
+            noEmpty === true &&
+            typeof data === "object" &&
+            !Array.isArray(data)
+        ) {
             const noEmptyData = {};
 
             Object.keys(data).forEach(key => {
                 const value = data[key];
-                if (value !== null && value !== '' && value !== void 0) {
+                if (value !== null && value !== "" && value !== void 0) {
                     noEmptyData[key] = value;
                 }
             });
@@ -99,8 +80,8 @@ export default class SXAjax {
         const CancelToken = axios.CancelToken;
         let cancel;
 
-        const isGet = method === 'get';
-        const isDelete = method === 'delete';
+        const isGet = method === "get";
+        const isDelete = method === "delete";
         const isMock = this.isMock(url, data, method, options);
 
         let instance = this.instance;
@@ -122,23 +103,29 @@ export default class SXAjax {
         }
 
         /*
-        *
-        * Content-Type application/x-www-form-urlencoded 存在问题
-        * 参见：https://github.com/axios/axios/issues/362
-        *
-        * */
-        const defaultsContentType = instance.defaults.headers[method]['Content-Type']
-            || instance.defaults.headers[method]['content-type']
-            || instance.defaults.headers[method]['contentType']
-            || '';
+         *
+         * Content-Type application/x-www-form-urlencoded 存在问题
+         * 参见：https://github.com/axios/axios/issues/362
+         *
+         * */
+        const defaultsContentType =
+            instance.defaults.headers[method]["Content-Type"] ||
+            instance.defaults.headers[method]["content-type"] ||
+            instance.defaults.headers[method]["contentType"] ||
+            "";
 
-        const contentType = (options.headers && options.headers['Content-Type'])
-            || (options.headers && options.headers['content-type'])
-            || (options.headers && options.headers['contentType'])
-            || '';
+        const contentType =
+            (options.headers && options.headers["Content-Type"]) ||
+            (options.headers && options.headers["content-type"]) ||
+            (options.headers && options.headers["contentType"]) ||
+            "";
 
-        const isFormType = (defaultsContentType && defaultsContentType.indexOf('application/x-www-form-urlencoded') > -1)
-            || contentType.indexOf('application/x-www-form-urlencoded') > -1;
+        const isFormType =
+            (defaultsContentType &&
+                defaultsContentType.indexOf(
+                    "application/x-www-form-urlencoded"
+                ) > -1) ||
+            contentType.indexOf("application/x-www-form-urlencoded") > -1;
 
         if (isFormType) {
             data = stringify(data);
@@ -150,29 +137,44 @@ export default class SXAjax {
             data = {}; // data 是put、post 等请求发送的数据
         }
 
+        const user = window.localStorage.getItem(CURRENT_USER_KEY);
+
+        if (user !== "null" && user !== null) {
+            const { token } = JSON.parse(user);
+            if (token) {
+                options.headers["Authorization"] = `Bearer ${token}`;
+            }
+        }
+
         const ajaxPromise = new Promise((resolve, reject) => {
             instance({
                 method,
                 url,
                 data,
                 params,
-                cancelToken: new CancelToken(c => cancel = c),
-                ...options,
-            }).then(response => {
-                this.onShowSuccessTip(response, successTip);
-                resolve(originResponse ? response : response.data);
-            }, err => {
-                const isCanceled = err && err.message && err.message.canceled;
-                if (isCanceled) return; // 如果是用户主动cancel，不做任何处理，不会触发任何函数
-                this.onShowErrorTip(err, errorTip);
-                reject(err);
-            }).catch(error => {
-                reject(error);
-            });
+                cancelToken: new CancelToken(c => (cancel = c)),
+                ...options
+            })
+                .then(
+                    response => {
+                        this.onShowSuccessTip(response, successTip);
+                        resolve(originResponse ? response : response.data);
+                    },
+                    err => {
+                        const isCanceled =
+                            err && err.message && err.message.canceled;
+                        if (isCanceled) return; // 如果是用户主动cancel，不做任何处理，不会触发任何函数
+                        this.onShowErrorTip(err, errorTip);
+                        reject(err);
+                    }
+                )
+                .catch(error => {
+                    reject(error);
+                });
         });
-        ajaxPromise.cancel = function () {
+        ajaxPromise.cancel = function() {
             cancel({
-                canceled: true,
+                canceled: true
             });
         };
         return ajaxPromise;
@@ -186,7 +188,7 @@ export default class SXAjax {
      * @returns {Promise}
      */
     get(url, params, options) {
-        return this.ajax(url, params, 'get', options);
+        return this.ajax(url, params, "get", options);
     }
 
     /**
@@ -197,9 +199,8 @@ export default class SXAjax {
      * @returns {Promise}
      */
     post(url, data, options) {
-        return this.ajax(url, data, 'post', options);
+        return this.ajax(url, data, "post", options);
     }
-
 
     /**
      * 发送一个put请求，一般用于更新操作
@@ -209,7 +210,7 @@ export default class SXAjax {
      * @returns {Promise}
      */
     put(url, data, options) {
-        return this.ajax(url, data, 'put', options);
+        return this.ajax(url, data, "put", options);
     }
 
     /**
@@ -220,7 +221,7 @@ export default class SXAjax {
      * @returns {Promise}
      */
     patch(url, data, options) {
-        return this.ajax(url, data, 'patch', options);
+        return this.ajax(url, data, "patch", options);
     }
 
     /**
@@ -231,6 +232,6 @@ export default class SXAjax {
      * @returns {Promise}
      */
     del(url, data, options) {
-        return this.ajax(url, data, 'delete', options);
+        return this.ajax(url, data, "delete", options);
     }
 }
