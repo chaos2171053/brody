@@ -7,7 +7,6 @@ import config from "@/commons/config-hoc";
 import "./style.less";
 
 const Item = Menu.Item;
-
 @config({ ajax: true })
 export default class HeaderUser extends Component {
     static defaultProps = {
@@ -20,7 +19,8 @@ export default class HeaderUser extends Component {
 
     handleMenuClick = ({ key }) => {
         if (key === "logout") {
-            this.props.ajax.post("/mock/logout").then(toLogin);
+            // this.props.ajax.post("/mock/logout").then(toLogin);
+            toLogin();
         }
         if (key === "modifyPassword") {
             this.setState({ passwordVisible: true });

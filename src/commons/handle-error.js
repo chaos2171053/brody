@@ -50,13 +50,18 @@ function getErrorTip({ errorTip, error }) {
 }
 
 export default function handleError({ error, errorTip }) {
+    if (!error.response) {
+        return;
+    }
     if (error.response.status === 401) {
         notification.error({
             message: "失败",
             description: "登录失效，请重新登录",
             duration: 2
         });
-        return toLogin();
+        return setTimeout(() => {
+            toLogin();
+        }, 2000);
     }
 
     if (errorTip === false) return;

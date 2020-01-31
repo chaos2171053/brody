@@ -101,21 +101,6 @@ export default class SXAjax {
                 return response;
             },
             error => {
-                // if (error && error.response) {
-                //     const {
-                //         status
-                //     } = error.response
-                //     if (status === 401) {
-                //         notification.error({
-                //             message: "失败",
-                //             description: '登陆过期，请重新登陆',
-                //             duration: 2
-                //         });
-                //         return Promise.reject(toLogin());
-                //     } else {
-                //         return Promise.reject(error.response)
-                //     }
-                // }
                 return Promise.reject({ response: error.response });
             }
         );
