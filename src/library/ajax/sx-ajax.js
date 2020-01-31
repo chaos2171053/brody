@@ -158,8 +158,17 @@ export default class SXAjax {
             })
                 .then(
                     response => {
-                        this.onShowSuccessTip(response, successTip);
-                        resolve(originResponse ? response : response.data);
+                        const { code, data } = response.data;
+                        if (code === 200) {
+                            this.onShowSuccessTip(
+                                response.data.data,
+                                successTip
+                            );
+                            resolve(data);
+                        } else {
+                            this.onShowErrorTip(response.data, errorTip);
+                            reject(data);
+                        }
                     },
                     err => {
                         const isCanceled =

@@ -1,5 +1,5 @@
-import {notification} from 'antd';
-import {toLogin} from './index';
+import { notification } from "antd";
+import { toLogin } from "./index";
 
 /**
  * 尝试获取错误信息 errorTio > resData.message > error.message > '未知系统错误'
@@ -8,54 +8,57 @@ import {toLogin} from './index';
  * @param errorTip
  * @returns {*}
  */
-function getErrorTip({error, errorTip}) {
-    const commonTip = '系统开小差了，请稍后再试或联系管理员';
+function getErrorTip({ error, errorTip }) {
+    const commonTip = "系统开小差了，请稍后再试或联系管理员";
 
     if (errorTip && errorTip !== true) return errorTip;
 
-    if (error && error.response) {
-        const {status, message} = error.response;
+    if (error && error.data) {
+        const { code, data } = error;
 
-        if (status === 403) {
-            return '您无权访问';
+        if (code === 403) {
+            return "您无权访问";
         }
 
-        if (status === 404) {
-            return '您访问的资源不存在';
+        if (code === 404) {
+            return "您访问的资源不存在";
         }
 
-        if (status === 504) {
+        if (code === 504) {
             return commonTip;
         }
 
-        if (status === 500) {
+        if (code === 500) {
             return commonTip;
         }
 
         // 后端自定义信息
-        if (message) return message;
+        if (typeof data.error === "string") return data.error;
+        if (Object.prototype.toString.call(data.error).includes("Object")) {
+            let msg = "";
+            Object.keys(data.error).forEach(
+                key => (msg += ` ${key}: ${data.error[key]}`)
+            );
+            return msg;
+        }
     }
-
-    if (error && error.message && error.message.startsWith('timeout of')) return '方位超时';
-
-    if (error) return error.message;
 
     return commonTip;
 }
 
-export default function handleError({error, errorTip}) {
-    const {status} = error?.response || {};
+export default function handleError({ error, errorTip }) {
+    const { code } = error;
 
     // 如果是未登录问题，不显示错误提示
-    if (status === 401) return toLogin();
+    if (code === 401) return toLogin();
 
     if (errorTip === false) return;
 
-    const description = getErrorTip({error, errorTip});
+    const description = getErrorTip({ error, errorTip });
 
     notification.error({
-        message: '失败',
+        message: "失败",
         description,
-        duration: 2,
+        duration: 2
     });
 }
