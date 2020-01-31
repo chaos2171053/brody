@@ -1,7 +1,6 @@
 import axios from "axios";
 import { stringify } from "qs";
 import { CURRENT_USER_KEY } from "@/commons/index";
-
 export default class SXAjax {
     /**
      * 构造函数传入的是自定义的一些配置，
@@ -97,6 +96,29 @@ export default class SXAjax {
          * });
          *
          * */
+        instance.interceptors.response.use(
+            response => {
+                return response;
+            },
+            error => {
+                // if (error && error.response) {
+                //     const {
+                //         status
+                //     } = error.response
+                //     if (status === 401) {
+                //         notification.error({
+                //             message: "失败",
+                //             description: '登陆过期，请重新登陆',
+                //             duration: 2
+                //         });
+                //         return Promise.reject(toLogin());
+                //     } else {
+                //         return Promise.reject(error.response)
+                //     }
+                // }
+                return Promise.reject({ response: error.response });
+            }
+        );
 
         if (isMock) {
             instance = this.mockInstance;
