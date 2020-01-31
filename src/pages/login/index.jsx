@@ -59,9 +59,8 @@ export default class extends Component {
             this.setState({ loading: true, message: "" });
             this.props.ajax
                 .post("/auth/login", params, { errorTip: false })
-                // TODO 请求拦截
                 .then(res => {
-                    const { id, name, token } = res.data;
+                    const { id, name, token } = res;
                     setLoginUser({
                         id,
                         name,
