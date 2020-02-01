@@ -17,7 +17,6 @@ import tableEditable from "./table-editable";
 import tableRowDraggable from "./table-row-draggable";
 import ToolBar, { ToolItem } from "./tool-bar";
 import UserAvatar from "./user-avatar";
-
 export {
     AsyncSelect,
     ColorPicker,
