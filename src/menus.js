@@ -109,13 +109,28 @@ export default function getMenus(userId) {
         //     path: "/404",
         //     order: 700
         // },
-        { key: "article", text: "文章管理", icon: "align-left" },
+        {
+            key: "project",
+            text: "项目官网",
+            icon: "github",
+            url: "https://github.com/chaos2171053/brody",
+            target: "",
+            order: 2000
+        },
+        { key: "article", text: "内容管理", icon: "align-left" },
         {
             key: "article-list",
             parentKey: "article",
-            text: "文章列表",
+            text: "文章管理",
             path: "/article",
             icon: "align-left"
+        },
+        {
+            key: "article-type",
+            parentKey: "article",
+            text: "类别管理",
+            icon: "align-left",
+            path: "/article/type"
         }
     ]);
 }

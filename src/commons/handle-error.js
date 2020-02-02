@@ -53,7 +53,8 @@ export default function handleError({ error, errorTip }) {
     if (!error.response) {
         return;
     }
-    if (error.response.status === 401) {
+    const { status } = error.response;
+    if (status === 401) {
         notification.error({
             message: "失败",
             description: "登录失效，请重新登录",
@@ -63,7 +64,6 @@ export default function handleError({ error, errorTip }) {
             toLogin();
         }, 2000);
     }
-
     if (errorTip === false) return;
 
     const description = getErrorTip({ errorTip, error: error.response.data });
