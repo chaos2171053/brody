@@ -28,7 +28,8 @@ export default class UserCenter extends Component {
         pageSize: 10, // 分页每页显示条数
         deleting: false, // 批量删除中loading
         singleDeleting: {}, // 操作列删除loading
-        id: null // 需要修改的数据id
+        id: null, // 需要修改的数据id
+        article_type: []
     };
 
     columns = [
@@ -71,6 +72,24 @@ export default class UserCenter extends Component {
 
     componentDidMount() {
         this.handleSearch();
+        this.fetchArticleType();
+    }
+    async fetchArticleType() {
+        const params = {
+            page: 1,
+            pageSize: 100
+        };
+        await this.props.ajax.get("/admin/article_type", params).then(res => {
+            const article_type = res.data.map(type => {
+                return {
+                    label: type.type_name,
+                    value: type.id
+                };
+            });
+            this.setState({
+                article_type
+            });
+        });
     }
 
     handleSearch = e => {
@@ -79,11 +98,11 @@ export default class UserCenter extends Component {
 
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (err) return;
-
             const { pageNum, pageSize } = this.state;
             const params = {
                 page: pageNum,
-                pageSize
+                pageSize,
+                ...values
             };
 
             this.setState({ loading: true });
@@ -160,7 +179,8 @@ export default class UserCenter extends Component {
             selectedRowKeys,
             total,
             pageNum,
-            pageSize
+            pageSize,
+            article_type
             // id,
         } = this.state;
 
@@ -179,17 +199,14 @@ export default class UserCenter extends Component {
                             <FormElement
                                 {...formProps}
                                 label="名称"
-                                field="name"
+                                field="title"
                             />
                             <FormElement
                                 {...formProps}
                                 type="select"
                                 label="类别"
-                                field="article_type"
-                                options={[
-                                    { value: 1, label: 1 },
-                                    { value: 2, label: 2 }
-                                ]}
+                                field="type_id"
+                                options={article_type}
                             />
                             <FormElement layout width="auto">
                                 <Button type="primary" htmlType="submit">
