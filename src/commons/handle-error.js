@@ -71,6 +71,6 @@ export default function handleError({ error, errorTip }) {
     notification.error({
         message: "失败",
         description,
-        duration: 2
+        duration: 3
     });
 }

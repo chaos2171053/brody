@@ -50,7 +50,8 @@ export default class UserCenter extends Component {
                 const items = [
                     {
                         label: "编辑",
-                        onClick: () => this.setState({ visible: true, id })
+                        onClick: () =>
+                            this.props.history.push(`/article/_/edit/${id}`)
                     },
                     {
                         label: "删除",
@@ -160,7 +161,7 @@ export default class UserCenter extends Component {
             total,
             pageNum,
             pageSize
-            // id
+            // id,
         } = this.state;
 
         const { form } = this.props;

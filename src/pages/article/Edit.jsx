@@ -14,7 +14,8 @@ import { notification } from "antd";
 const mdParser = new MarkdownIt();
 @config({
     path: "/article/_/edit/:id",
-    ajax: true
+    ajax: true,
+    connect: true
 })
 @connect(state => {
     const { title } = state.page;
@@ -30,6 +31,7 @@ export default class Edit extends Component {
         articleType: [], // 文章类别
         isEdit: false // 是否是编辑页面
     };
+    static displayName = `page-article-edit`;
 
     async componentDidMount() {
         const { id } = this.props.match.params;
@@ -40,8 +42,9 @@ export default class Edit extends Component {
 
         this.setState({ isEdit });
         await this.fetchArticleType();
+
         if (isEdit) {
-            this.fetchData();
+            await this.fetchData();
             page.setTitle("编辑文章");
         } else {
             page.setTitle("新增文章");
@@ -64,20 +67,20 @@ export default class Edit extends Component {
             });
         });
     };
-    fetchData = () => {
+    async fetchData() {
         if (this.state.loading) return;
 
-        const { id } = this.props;
+        const { id } = this.props.match.params;
 
         this.setState({ loading: true });
-        this.props.ajax
+        await this.props.ajax
             .get(`/admin/article/${id}`)
             .then(res => {
-                console.log("res", res);
-                // this.setState({ data: res || {} });
+                console.log(res);
+                this.setState({ data: { ...res } });
             })
             .finally(() => this.setState({ loading: false }));
-    };
+    }
 
     handleSubmit = () => {
         if (this.state.loading) return;
@@ -116,15 +119,18 @@ export default class Edit extends Component {
 
             const { isEdit } = this.state;
             const ajaxMethod = isEdit
-                ? this.props.ajax.put
+                ? this.props.ajax.patch
                 : this.props.ajax.post;
             const successTip = isEdit ? "修改成功！" : "添加成功！";
+            const url = isEdit
+                ? `/admin/article/${this.props.match.params.id}`
+                : `/admin/article`;
 
             this.setState({ loading: true });
-            ajaxMethod("/admin/article", params, { successTip })
+
+            ajaxMethod(url, params, { successTip, noEmpty: true })
                 .then(() => {
-                    const { onOk } = this.props;
-                    onOk && onOk();
+                    this.props.action.system.closeCurrentTab();
                 })
                 .finally(() => this.setState({ loading: false }));
         });
@@ -191,7 +197,7 @@ export default class Edit extends Component {
                             type="date-time"
                             label="发表时间"
                             field="created_at"
-                            initialValue={data.created_at}
+                            initialValue={moment(data.created_at)}
                             required
                         ></FormElement>
                     </FormRow>
