@@ -159,8 +159,8 @@ export default class UserCenter extends Component {
             selectedRowKeys,
             total,
             pageNum,
-            pageSize,
-            id
+            pageSize
+            // id
         } = this.state;
 
         const { form } = this.props;

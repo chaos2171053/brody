@@ -54,8 +54,8 @@ export default class SXAjax {
         let {
             successTip = false, // 默认false，不展示
             errorTip, //  = method === 'get' ? '获取数据失败！' : '操作失败！', // 默认失败提示
-            noEmpty = false, // 过滤掉 值为 null、''、undefined三种参数，不传递给后端
-            originResponse = false
+            noEmpty = false // 过滤掉 值为 null、''、undefined三种参数，不传递给后端
+            // originResponse = false
         } = options;
 
         // 删除 参数对象中为 null '' undefined 的数据，不发送给后端
